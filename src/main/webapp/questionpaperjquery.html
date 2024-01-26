@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <title>IN TEST</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style type="text/css">
+        footer {
+            position: static;
+        }
+        #submitBtn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #submitBtn:hover {
+            background-color: #0056b3;
+        }       
+    </style>
+</head>
+<body>
+    <div id="container">
+        <header>
+            <h1>
+                <span class="blue-text">In Test</span>
+            </h1>
+        </header>
+        <br>
+        <div style="color: white; font-size: 18px; text-align: right;">
+            Time Left: <span id="exam_time"></span>
+            <script src="js/examTimer.js"></script>
+        </div>
+        <br> <br> <br>
+        <section>
+            <table id="questionTable">
+            </table>
+        </section>
+    </div>
+    <button id="submitBtn">Submit Answers</button>
+    <footer> Internal Test - ABC Company Limited </footer>
+    <script>
+        $(document).ready(function () {
+            $.getJSON("questionPaper.txt", function(data) {//questionPaper.txt
+                var testData = data.questions;              
+                var tableHTML = '';
+                for (var i = 0; i < testData.length; i++) {
+                    var question = testData[i];
+                    tableHTML += '<tr>';
+                    tableHTML += '<td>' + question.qNumber + '. ' + question.qDescription + '<br>';
+                    tableHTML += '<table>';
+                    for (var j = 0; j < question.qOptions.length; j++) {
+                        var option = question.qOptions[j];
+                        tableHTML += '<tr>';
+                        tableHTML += '<td>' + option + '</td>';
+                        tableHTML += '<td>';
+                        if (question.qType === 'RADIO') {
+                            tableHTML += '<input type="radio" name="' + question.qNumber + '+radio" value="' + option + '" required />';
+                        } else if (question.qType === 'CHECK') {
+                            tableHTML += '<input type="checkbox" name="' + question.qNumber + '+check" value="' + option + '" />';
+                        } else if (question.qType === 'DESC') {
+                            tableHTML += '<textarea name="' + question.qNumber + '+text"></textarea>';
+                        }
+                        tableHTML += '</td>';
+                        tableHTML += '</tr>';
+                    }
+                    tableHTML += '</table>';
+                    tableHTML += '</td>';
+                    tableHTML += '</tr>';
+                }
+                $('#questionTable').html(tableHTML);
+            });
+
+            // Add an event listener for the submit button
+            $('#submitBtn').click(function () {
+                var chosenAnswers = gatherChosenAnswers();
+                displayChosenAnswersInNewWindow(chosenAnswers);
+            });
+
+            function gatherChosenAnswers() {
+                var chosenAnswers = [];
+                $('#questionTable tr').each(function () {
+                    var questionNumber = $(this).find('td:first-child').text().split('.')[0].trim();
+                    var selectedOptions = [];
+                    $(this).find('input[type="radio"]:checked, input[type="checkbox"]:checked, textarea').each(function () {
+                        selectedOptions.push($(this).val());
+                    });
+                    if (selectedOptions.length > 0) {
+                        chosenAnswers.push({
+                            questionNumber: questionNumber,
+                            selectedOptions: selectedOptions
+                        });
+                    }
+                });
+                return chosenAnswers;
+            }
+            function displayChosenAnswersInNewWindow(chosenAnswers) {
+                var jsonAnswers = JSON.stringify(chosenAnswers, null, 2);
+                var newWindow = window.open('', '_blank');
+                newWindow.document.write('<pre>' + jsonAnswers + '</pre>');
+                newWindow.document.close();
+            }
+        });
+    </script>
+</body>
+</html>

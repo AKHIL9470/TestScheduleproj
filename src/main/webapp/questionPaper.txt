@@ -1,0 +1,40 @@
+{
+  "questions": [
+  
+    {"qNumber": "1",
+     "qType": "RADIO",
+     "qMarks": "1",
+     "qDescription": "Java is a Platform Independent Language?",
+     "qOptions": ["True","False"]
+   }, 
+   
+   
+   {"qNumber": "2",
+     "qType": "CHECK",
+     "qMarks": "1",
+     "qDescription": "Java is a Platform Independent Language?",
+     "qOptions": ["Check Box option1","Check Box option2","Check Box option3","Check Box option4"]
+   }, 
+   
+   {"qNumber": "3",
+     "qType": "DESC",
+     "qMarks": "2",
+     "qDescription": "Java is a Platform Independent Language?",
+     "qOptions": [""]
+   }, 
+   
+   {"qNumber": "4",
+     "qType": "RADIO",
+     "qMarks": "3",
+     "qDescription": "Java is a Platform Independent Language?",
+     "qOptions": ["Yes","No"]
+   },
+   {"qNumber": "5",
+     "qType": "RADIO",
+     "qMarks": "3",
+     "qDescription": "Java is a Platform Independent Language?",
+     "qOptions": ["option1","option2","option3","option4"]
+   }
+   
+]
+}

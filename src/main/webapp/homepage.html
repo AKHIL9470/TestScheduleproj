@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX Call Example</title>
+    <style>
+    body {
+            background-color: lightblue;
+        }
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 15px auto; 
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 10px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div id="testData"></div>
+<table>
+    <thead>
+        <tr>
+            <th>Test Code</th>
+            <th>Test Name</th>
+            <th>Test Date</th>
+            <th>Test Duration</th>
+            <th>Test Marks</th>
+            <th>Question Count</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: 'http://localhost:8031/TestSchedule_project/rest/exam/1002', // Replace with your URL
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                displayTestData(data);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', status, error);
+            }
+        });
+        function displayTestData(data) {
+            var tableBody = $('#tableBody');
+            data.forEach(function(test) {
+                var row = '<tr>';
+                row += '<td>' + test.testCode + '</td>';
+                row += '<td>' + test.testName + '</td>';
+                row += '<td>' + test.testDate + '</td>';
+                row += '<td>' + test.testDuration + ' minutes</td>';
+                row += '<td>' + test.testMarks + '</td>';
+                row += '<td>' + test.questionCount + '</td>';
+                row += '<td><button><a href="questionpaperjquery.html">Take test</button></td>';
+                row += '</tr>';
+                tableBody.append(row);
+            });
+        }
+        function redirectToQuestionPaper(testCode) {
+            window.location.href = 'questionpaper.html?testCode=' + testCode;
+        }
+    });
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function() {
+        null;
+    };
+</script>
+</body>
+</html>
